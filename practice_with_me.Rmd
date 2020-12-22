@@ -1,0 +1,23 @@
+---
+title: "Doc with DB 13"
+author: "Shannon Keenan"
+date: "10/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r}
+library(readxl)
+db13 <- read_excel("../data/db13.xls")
+head(db13)
+plot(db13$clinic)
+
+```
+
+
+
+

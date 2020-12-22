@@ -1,0 +1,40 @@
+---
+title: "DB13_prac_ch11"
+author: "Shannon Keenan"
+date: "10/22/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+bilab = c()
+for (i in 1:nrow(db13)){
+  if (db13$labinout[i] < 0){
+    bilab[i] = 0 
+  }
+  else{
+    bilab[i] = 1
+  }
+}
+
+db13$bilab = bilab
+
+print(db13$bilab)
+
+db13
+```
+
+```{r}
+wilcox.test(db13$dif, mu = 0, alternative = "two.sided")
+```
+```{r}
+wilcox.test(db13$dif, db13$bilab, alternative = "two.sided")
+```
+```{r}
+kruskal.test(db13$dif~ db13$labinout)
+```
+

@@ -1,0 +1,141 @@
+---
+title: "DB_26_Prac"
+author: "Shannon Keenan"
+date: "10/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+db13 <- read_excel("../data/db13.xls")
+View(db13)
+```
+
+Here is a header of my data, database 13. This is for observing the differences between lab and clinic readings for Warafin, a blood anticoagulant measured in international normalized ration vlaues. 
+
+```{r}
+library(expss)
+head(db13)
+db13 = apply_labels(db13,
+                    clininout = "Clinic Readings",
+                    labinout = "Lab Readings")
+```
+Let's make a table comparing the results of the lab and clinic readings 
+
+```{r}
+#readings <- cro(db13$clininout, db13$labinout)
+#readings
+
+clinOut <- array(db13$clininout)
+labOut <- array(db13$labinout)
+
+#combined <- clinOut + labOut
+#length(clinOut)
+
+same_neg = 0
+clin_neg_lab0 = 0
+clin_neg_lab1 =0 
+clin0_labNeg = 0
+clin0_lab0 = 0
+clin0_lab1 = 0
+clin1_labNeg = 0
+clin1_lab0 = 0
+clin1_lab1 = 0
+
+# print(clinOut)
+# print(labOut)
+# print(labOut[104])
+
+for (i in 1:length(clinOut)) {
+if (clinOut[i] == -1  && labOut[i] == -1) {
+    same_neg = same_neg + 1
+}    
+
+if (clinOut[i] == -1 && labOut[i] == 0){
+    clin_neg_lab0 = clin_neg_lab0 + 1
+}
+if (clinOut[i] == -1 && labOut[i] == 1){
+    clin_neg_lab1 = clin_neg_lab1 + 1
+}
+if (clinOut[i] == 0 && labOut[i] == -1){
+clin0_labNeg = clin0_labNeg + 1
+}
+if (clinOut[i] == 0 && labOut[i] == 0){
+clin0_lab0 = clin0_lab0 + 1
+}
+if (clinOut[i] == 0 && labOut[i] == 1){
+clin0_lab1 = clin0_lab1 + 1
+}
+if (clinOut[i] == 1 && labOut[i] == -1){
+clin1_labNeg = clin1_labNeg + 1
+}
+if (clinOut[i] == 1 && labOut[i] == 0){
+clin1_lab0 = clin1_lab0 + 1
+}    
+if (clinOut[i] == 1 && labOut[i] == 1){
+clin1_lab1 = clin1_lab1 + 1
+}
+}
+
+all_counts <- c(same_neg,
+                clin0_labNeg,
+                clin1_labNeg,
+clin_neg_lab0,
+clin0_lab0,
+clin1_lab0,
+clin_neg_lab1, 
+clin0_lab1,
+clin1_lab1)
+
+#all_counts
+
+# print(i)
+# print(j)
+# print(same_neg)
+# print(clin_neg_lab0)
+# 
+ readings <- matrix(data = all_counts, nrow = 3, ncol = 3)
+colnames(readings) = c("-1", "0", "1" )
+rownames(readings) =  c( "-1", "0", "1" )
+names(dimnames(readings)) <- c("Clinic Readings", "Lab Readings")
+ 
+ readings
+```
+
+
+Let's make a table with the proportions of each :
+
+```{r}
+tab2 <- table(db13$clininout, db13$labinout)
+tab2
+```
+Let's run a Chi-Sq test for independence 
+
+```{r}
+
+chisq.test(db13$clininout, db13$labinout)
+
+
+```
+This test is giving us a warning that the approximations may be incorrect. This is because the expected values for each cell were not all greater than 1 and the entries were not all greater than 5. We should not use a Chi- squared test here. Let's use a Fisher's Exact Test. 
+
+```{r}
+fisher.test(db13$clininout, db13$labinout)
+```
+This a very small p-value. This means that the null hypothesis that the column and rows are independent of each other can be rejected.
+Let's try a G-test
+
+```{r}
+library(pROC)
+#View(db1)
+#plot.roc(db1$tru, db1$psa)
+
+plot.roc(db18$hsv2, db18$yrshiv)
+
+
+```
+
