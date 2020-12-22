@@ -114,7 +114,7 @@ tab2 <- table(db13$clininout, db13$labinout)
 tab2
 ```
 Let's run a Chi-Sq test for independence 
-
+#test
 ```{r}
 
 chisq.test(db13$clininout, db13$labinout)
