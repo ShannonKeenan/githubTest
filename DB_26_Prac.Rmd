@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readxl)
 db13 <- read_excel("../data/db13.xls")
 View(db13)
+#test test test
 ```
 
 Here is a header of my data, database 13. This is for observing the differences between lab and clinic readings for Warafin, a blood anticoagulant measured in international normalized ration vlaues. 
